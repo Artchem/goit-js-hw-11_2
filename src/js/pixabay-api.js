@@ -11,7 +11,7 @@ const params = {
   per_page: 40,
 };
 async function fetchPixabay(value, page = 1) {
-  const resp = await axios.get(`?q=${value}&${page}`, { params });
+  const resp = await axios.get(`?q=${value}&page=${page}`, { params });
   const data = await resp.data;
   return data;
 }
