@@ -68,14 +68,15 @@ async function onSearchSubmit(evt) {
     observer.observe(refs.targetDiv);
 
     gallery = new SimpleLightbox('.gallery-link');
+    if (firstPage.hits.length !== 0) {
+      Notiflix.Notify.success(
+        `Hooray! We found ${firstPage.totalHits} images.`
+      );
+    }
 
     if (firstPage.hits.length === 0) {
       Notiflix.Notify.failure(
         `Sorry, there are no images matching your search query. Please try again.`
-      );
-    } else {
-      Notiflix.Notify.success(
-        `Hooray! We found ${firstPage.totalHits} images.`
       );
     }
   } catch (error) {
