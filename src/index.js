@@ -16,7 +16,7 @@ let gallery = new SimpleLightbox('.gallery-link');
 const targetDiv = document.querySelector('.js-guard');
 const options = {
   root: null,
-  rootMargin: '500px',
+  rootMargin: '250px',
   threshold: 1.0,
 };
 
@@ -26,7 +26,10 @@ async function onLoadMore(entries, observer) {
   entries.forEach(async entry => {
     if (entry.isIntersecting) {
       try {
+        let countPhotos = refs.gallery.childElementCount;
+
         pageCurrent += 1;
+
         const nextPage = await API.fetchPixabay(searchQuery, pageCurrent);
 
         refs.gallery.insertAdjacentHTML(
@@ -36,11 +39,18 @@ async function onLoadMore(entries, observer) {
 
         gallery.refresh();
 
-        if (nextPage.hits.length === 0) {
-          Notiflix.Notify.failure(
-            `Sorry, there are no images matching your search query. Please try again.`
-          );
+        countPhotos += nextPage.hits.length;
+        console.log(countPhotos);
+
+        if (countPhotos >= nextPage.totalHits) {
+          observer.unobserve(refs.targetDiv);
         }
+
+        // if (nextPage.hits.length === 0) {
+        //   Notiflix.Notify.failure(
+        //     `Sorry, there are no images matching your search query. Please try again.`
+        //   );
+        // }
       } catch (error) {
         console.log(error.message);
       }
